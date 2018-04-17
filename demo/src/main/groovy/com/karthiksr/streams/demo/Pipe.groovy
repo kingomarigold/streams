@@ -100,10 +100,19 @@ class Pipe {
 		.windowedBy(TimeWindows.of(2*1000))
 		.aggregate([apply:{ new CustomValue()}] as Initializer,
 			[apply:{key,value,agg-> 
-				new CustomValue(dam:key,cubicFeet:agg.cubicFeet + value.cubicFeet)}] as Aggregator,
+				def startTime = agg.startTime
+				def endTime = agg.endTime
+				if (!startTime || value.millis < startTime) {
+					startTime = value.millis
+				}
+				if (value.millis > endTime) {
+					endTime = value.millis
+				}
+				new CustomValue(dam:key,cubicFeet:agg.cubicFeet + value.cubicFeet,
+				startTime:startTime,endTime:endTime)}] as Aggregator,
 			Materialized.with(keySerde,mappingSerde))
 		.toStream()
-				.to('streams-pipe-output',Produced.with(windowedSerde,mappingSerde))
+				.to('two-second-output',Produced.with(windowedSerde,mappingSerde))
 
 		Topology topology = builder.build()
 		println topology.describe()
