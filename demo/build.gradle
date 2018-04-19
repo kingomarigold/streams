@@ -25,9 +25,24 @@ repositories {
 
 
 dependencies {
-	compile('org.apache.kafka:kafka-streams:1.0.1')
+	compile('org.apache.kafka:kafka_2.12:1.0.1') {
+		exclude group:'org.apache.zookeeper',module:'zookeeper'
+		exclude group:'org.slf4j',module:'slf4j-log4j12'
+		exclude group:'log4j',module:'log4j'
+	}
+	compile('org.apache.kafka:kafka-streams:1.0.1') {
+		exclude group:'org.apache.zookeeper',module:'zookeeper'
+		exclude group:'org.slf4j',module:'slf4j-log4j12'
+		exclude group:'log4j',module:'log4j'
+	}
 	compile('org.codehaus.groovy:groovy')
 	compile group: 'org.apache.storm', name: 'storm-core', version: '1.2.1'
+	compile('org.apache.storm:storm-kafka:1.0.1') {
+		exclude group:'org.apache.zookeeper',module:'zookeeper'
+		exclude group:'org.slf4j',module:'slf4j-log4j12'
+		exclude group:'log4j',module:'log4j'
+	}
+
 	runtime('com.h2database:h2')
 	runtime('mysql:mysql-connector-java')
 }
