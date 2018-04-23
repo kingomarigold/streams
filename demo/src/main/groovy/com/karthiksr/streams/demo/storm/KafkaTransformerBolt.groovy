@@ -20,7 +20,7 @@ class KafkaTransformerBolt implements IRichBolt {
 	@Override
 	public void execute(Tuple input) {
 		outputCollector.emit(new Values(input.getStringByField('name'),
-			"{\"startTime\":\"${input.getLongByField('startTime')}\",\"endTime\":\"${input.getLongByField('endTime')}\",\"totalVolume\":\"${input.getLongByField('totalVolume')}\"}".toString()))
+			"{\"name\":\"${input.getStringByField('name')}\",\"startTime\":\"${input.getLongByField('startTime')}\",\"endTime\":\"${input.getLongByField('endTime')}\",\"totalVolume\":\"${input.getLongByField('totalVolume')}\"}".toString()))
 	}
 
 	@Override

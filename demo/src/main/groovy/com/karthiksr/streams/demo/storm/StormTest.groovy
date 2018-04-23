@@ -23,7 +23,8 @@ class StormTest {
 
 		//Creating SpoutConfig Object
 		SpoutConfig spoutConfig = new SpoutConfig(hosts, 
-		   'test', '/test','Storm-1')
+		   'test', '','Storm-1')
+		
 		
 		//convert the ByteBuffer to String.
 		spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
@@ -51,8 +52,10 @@ class StormTest {
 	void run() {
 		LocalCluster cluster = new LocalCluster()
 		Config config = new Config()
-		config.setDebug(true)
+		config.setDebug(false)
+		config.setNumWorkers(4)
 		cluster.submitTopology('KSRTopology', config, builder.createTopology())
+		//StormSubmitter.submitTopology('DamTopology',config,builder.createTopology())
 		Thread.sleep(1000000)
 		  
 		//Stop the topology

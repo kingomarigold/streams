@@ -26,6 +26,7 @@ class DamProducer {
 		Random random = new Random()
 		for (int i = 0 ; i < 100; ++i) {
 			for (int j = 0; j < 1000; ++j) {
+				producer.send(new ProducerRecord('test',"Mettur,${millis+(i*1000+j)},${random.nextInt(500)}".toString()))
 				producer.send(new ProducerRecord('test',"KRS,${millis+(i*1000+j)},${random.nextInt(500)}".toString()))
 			}
 		}

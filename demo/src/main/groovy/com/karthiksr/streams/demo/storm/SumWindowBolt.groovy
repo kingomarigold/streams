@@ -24,23 +24,22 @@ class SumWindowBolt extends BaseWindowedBolt {
 
 	@Override
 	public void execute(TupleWindow inputWindow) {
-		Long total = 0
-		def name =''
-		def startTime = 0, endTime=0
+		def group = [:]
 		inputWindow.get().each { Tuple value ->
-			total += value.getLongByField('volume')
+			def name = value.getStringByField('name')
+			def myValue = group.get(name,[total:0,startTime:0,endTime:0])
+			myValue.total += value.getLongByField('volume')
 			def timeStamp = value.getLongByField('timeStamp')
-			if (timeStamp < startTime || !startTime) {
-				startTime = timeStamp
+			if (timeStamp < myValue.startTime || !myValue.startTime) {
+				myValue.startTime = timeStamp
 			}
-			if (timeStamp > endTime) {
-				endTime = timeStamp
-			}
-			if (!name) {
-				name = value.getStringByField('name')
+			if (timeStamp > myValue.endTime) {
+				myValue.endTime = timeStamp
 			}
 		}
-		outputCollector.emit(new Values(name,total,startTime,endTime))
+		group.each {key,value->
+			outputCollector.emit(new Values(key,value.total,value.startTime,value.endTime))
+		}
 	}
 	
 	@Override
