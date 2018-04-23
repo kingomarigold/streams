@@ -43,6 +43,10 @@ dependencies {
 		exclude group:'log4j',module:'log4j'
 	}
 
+	compile ( group: 'org.apache.zookeeper', name: 'zookeeper', version: '3.4.5') {
+		exclude group:'org.slf4j',module:'slf4j-log4j12'
+	}
+	
 	runtime('com.h2database:h2')
 	runtime('mysql:mysql-connector-java')
 }
